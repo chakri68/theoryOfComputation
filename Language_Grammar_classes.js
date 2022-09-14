@@ -57,16 +57,25 @@ class Language {
     this.grammar = grammar;
   }
   /**
+   * @param  {Number} n
+   */
+  generateStringsbyLength(n) {
+    let resSet = new Set();
+    this._generateStringbyLength(n, null, resSet);
+    return Array.from(resSet);
+  }
+
+  /**
    * @param  {Number} n The size of the string
    */
-  generateStringbyLength(n, currString = null) {
+  _generateStringbyLength(n, currString = null, retSet = new Set()) {
     let currS;
     if (currString != null) {
       currS = `${currString}`;
     } else currS = null;
     if (currS == null) {
       Array.from(this.grammar.rules[this.grammar.startVariable]).map((str) => {
-        this.generateStringbyLength(n, str);
+        this._generateStringbyLength(n, str, retSet);
       });
     } else if (
       currS.length > n + 1 ||
@@ -75,7 +84,7 @@ class Language {
     )
       return;
     else if (currS.length == n && !this.grammar.checkForVariables(currS)) {
-      console.log(currS);
+      retSet.add(currS);
       return;
     } else {
       for (let i = 0; i < currS.length; i++) {
@@ -86,9 +95,10 @@ class Language {
             //   currS,
             //   replaced: currS.replace(currS[i], replacement),
             // });
-            this.generateStringbyLength(
+            this._generateStringbyLength(
               n,
-              currS.replace(currS[i], replacement)
+              currS.replace(currS[i], replacement),
+              retSet
             );
           });
         }
