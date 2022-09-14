@@ -116,4 +116,5 @@ class Language {
 let myGrammar = new Grammar(["S", "R"], { S: ["0S1", "R"], R: [""] }, "S");
 
 let myLanguage = new Language(myGrammar);
-myLanguage.generateStringbyLength(6);
+let result_array = myLanguage.generateStringsbyLength(6);
+console.log(result_array);
